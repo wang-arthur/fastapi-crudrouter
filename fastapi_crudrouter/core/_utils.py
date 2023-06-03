@@ -18,15 +18,6 @@ def get_pk_type(schema: Type[PYDANTIC_SCHEMA], pk_field: str) -> Any:
     except KeyError:
         return int
 
-def rename_route(method: str, name: str) -> Callable:
-    def decorator(func: Callable) -> Callable:
-        def wrapper(*args, **kwargs) -> Callable:
-            func(*args, **kwargs)
-        wrapper.__name__ = f"{method}_{name}"
-        return wrapper
-    return decorator
-
-
 def schema_factory(
     schema_cls: Type[T], pk_field_name: str = "id", name: str = "Create"
 ) -> Type[T]:
