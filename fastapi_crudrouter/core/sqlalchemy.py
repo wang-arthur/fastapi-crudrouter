@@ -66,6 +66,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
             **kwargs
         )
 
+    @_utils.rename_route("get_all", self.db_model.__tablename__)
     def _get_all(self, *args: Any, **kwargs: Any) -> CALLABLE_LIST:
         def route(
             db: Session = Depends(self.db_func),
@@ -84,6 +85,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
 
         return route
 
+    @_utils.rename_route("get", self.schema.__name__.lower())
     def _get_one(self, *args: Any, **kwargs: Any) -> CALLABLE:
         def route(
             item_id: self._pk_type, db: Session = Depends(self.db_func)  # type: ignore
@@ -97,6 +99,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
 
         return route
 
+    @_utils.rename_route("create", self.schema.__name__.lower())
     def _create(self, *args: Any, **kwargs: Any) -> CALLABLE:
         def route(
             model: self.create_schema,  # type: ignore
@@ -114,6 +117,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
 
         return route
 
+    @_utils.rename_route("update", self.schema.__name__.lower())
     def _update(self, *args: Any, **kwargs: Any) -> CALLABLE:
         def route(
             item_id: self._pk_type,  # type: ignore
@@ -137,6 +141,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
 
         return route
 
+    @_utils.rename_route("delete_all", self.db_model.__tablename__)
     def _delete_all(self, *args: Any, **kwargs: Any) -> CALLABLE_LIST:
         def route(db: Session = Depends(self.db_func)) -> List[Model]:
             db.query(self.db_model).delete()
@@ -146,6 +151,7 @@ class SQLAlchemyCRUDRouter(CRUDGenerator[SCHEMA]):
 
         return route
 
+    @_utils.rename_route("delete", self.schema.__name__.lower())
     def _delete_one(self, *args: Any, **kwargs: Any) -> CALLABLE:
         def route(
             item_id: self._pk_type, db: Session = Depends(self.db_func)  # type: ignore

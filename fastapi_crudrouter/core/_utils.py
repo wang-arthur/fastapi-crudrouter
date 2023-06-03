@@ -1,4 +1,4 @@
-from typing import Optional, Type, Any
+from typing import Optional, Type, Any, Callable
 
 from fastapi import Depends, HTTPException
 from pydantic import create_model
@@ -17,6 +17,14 @@ def get_pk_type(schema: Type[PYDANTIC_SCHEMA], pk_field: str) -> Any:
         return schema.__fields__[pk_field].type_
     except KeyError:
         return int
+
+def rename_route(method: str, name: str) -> Callable:
+    def decorator(func: Callable) -> Callable:
+        def wrapper(*args, **kwargs) -> Callable:
+            func(*args, **kwargs)
+        wrapper.__name__ = f"{method}_{name}"
+        return wrapper
+    return decorator
 
 
 def schema_factory(
